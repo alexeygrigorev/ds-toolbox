@@ -1,10 +1,10 @@
 package com.alexeygrigorev.dstools.cv;
 
-import static org.junit.Assert.*;
-
-import java.util.Arrays;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
+
+import com.alexeygrigorev.dstools.data.Datasets;
 
 public class FoldTest {
 
@@ -16,18 +16,14 @@ public class FoldTest {
         int[] trainIdx = { 0, 2, 4 };
         int[] testIdx = { 1, 3 };
 
-        Fold fold = Fold.fromIndexes(X, y, trainIdx, testIdx);
+        Fold fold = Fold.fromIndexes(Datasets.of(X, y), trainIdx, testIdx);
 
         double[][] expectedTrainX = { X[0], X[2], X[4] };
-        assertTrue(Arrays.equals(expectedTrainX, fold.getTrainX()));
-
         double[] expectedTrainY = { y[0], y[2], y[4] };
-        assertTrue(Arrays.equals(expectedTrainY, fold.getTrainY()));
+        assertEquals(Datasets.of(expectedTrainX, expectedTrainY), fold.getTrain());
 
         double[][] expectedTestX = { X[1], X[3] };
-        assertTrue(Arrays.equals(expectedTestX, fold.getTestX()));
-
         double[] expectedTestY = { y[1], y[3] };
-        assertTrue(Arrays.equals(expectedTestY, fold.getTestY()));
+        assertEquals(Datasets.of(expectedTestX, expectedTestY), fold.getTest());
     }
 }

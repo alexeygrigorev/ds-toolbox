@@ -1,23 +1,24 @@
 package com.alexeygrigorev.dstools.cv;
 
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
+import java.util.Objects;
+
+import com.alexeygrigorev.dstools.data.Dataset;
+import com.alexeygrigorev.dstools.data.Datasets;
 
 public class Fold {
 
-    private final double[][] trainX;
-    private final double[] trainY;
-    private final double[][] testX;
-    private final double[] testY;
+    private final Dataset train;
+    private final Dataset test;
 
-    public Fold(double[][] trainX, double[] trainY, double[][] testX, double[] testY) {
-        this.trainX = trainX;
-        this.trainY = trainY;
-        this.testX = testX;
-        this.testY = testY;
+    public Fold(Dataset train, Dataset test) {
+        this.train = train;
+        this.test = test;
     }
 
-    public static Fold fromIndexes(double[][] X, double[] y, int[] trainIndex, int[] testIndex) {
+    public static Fold fromIndexes(Dataset dataset, int[] trainIndex, int[] testIndex) {
+        double[][] X = dataset.getX();
+        double[] y = dataset.getY();
+
         int trainSize = trainIndex.length;
 
         double[][] trainXres = new double[trainSize][];
@@ -38,33 +39,31 @@ public class Fold {
             testYres[i] = y[idx];
         }
 
-        return new Fold(trainXres, trainYres, testXres, testYres);
+        Dataset train = Datasets.of(trainXres, trainYres);
+        Dataset test = Datasets.of(testXres, testYres);
+        return new Fold(train, test);
     }
 
-    public double[][] getTrainX() {
-        return trainX;
+    public Dataset getTrain() {
+        return train;
     }
 
-    public double[][] getTestX() {
-        return testX;
-    }
-
-    public double[] getTestY() {
-        return testY;
-    }
-
-    public double[] getTrainY() {
-        return trainY;
+    public Dataset getTest() {
+        return test;
     }
 
     @Override
     public boolean equals(Object obj) {
-        return EqualsBuilder.reflectionEquals(this, obj);
+        if (obj instanceof Fold) {
+            Fold other = (Fold) obj;
+            return train.equals(other.train) && test.equals(test);
+        }
+
+        return false;
     }
 
     @Override
     public int hashCode() {
-        return HashCodeBuilder.reflectionHashCode(this);
+        return Objects.hash(train, test);
     }
-
 }

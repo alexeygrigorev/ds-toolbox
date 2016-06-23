@@ -4,6 +4,9 @@ import org.apache.commons.lang3.Validate;
 
 public class RegressionMetrics {
 
+    public static Metric RMSE = RegressionMetrics::rmse;
+    public static Metric MAPE = RegressionMetrics::mape;
+
     /**
      * Root mean squared error
      * 
@@ -46,6 +49,8 @@ public class RegressionMetrics {
     }
 
     private static void validateLength(double[] actual, double[] predicted) {
+        Validate.notNull(actual, "actual must not be null");
+        Validate.notNull(predicted, "predicted must not be null");
         Validate.isTrue(actual.length == predicted.length, "actual and predicted must have the same length");
     }
 }
