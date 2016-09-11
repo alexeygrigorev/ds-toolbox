@@ -16,7 +16,7 @@ public class FoldTest {
         int[] trainIdx = { 0, 2, 4 };
         int[] testIdx = { 1, 3 };
 
-        Fold fold = Fold.fromIndexes(Datasets.of(X, y), trainIdx, testIdx);
+        Split fold = Split.fromIndexes(Datasets.of(X, y), trainIdx, testIdx);
 
         double[][] expectedTrainX = { X[0], X[2], X[4] };
         double[] expectedTrainY = { y[0], y[2], y[4] };

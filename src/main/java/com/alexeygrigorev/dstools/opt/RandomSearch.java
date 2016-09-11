@@ -12,7 +12,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.alexeygrigorev.dstools.cv.Fold;
+import com.alexeygrigorev.dstools.cv.Split;
 import com.alexeygrigorev.dstools.metrics.Metric;
 import com.alexeygrigorev.dstools.models.Model;
 import com.alexeygrigorev.dstools.opt.ParameterOptimizer.BestParams;
@@ -32,7 +32,7 @@ public class RandomSearch {
 
     private Model model;
     private Metric metric;
-    private List<Fold> folds;
+    private List<Split> folds;
 
     private OptimizationCallback<Model> callback;
 
@@ -71,11 +71,11 @@ public class RandomSearch {
         return this;
     }
 
-    public RandomSearch optimizeOnHoldOut(Fold validation) {
+    public RandomSearch optimizeOnHoldOut(Split validation) {
         return optimizeOnCV(Collections.singletonList(validation));
     }
 
-    public RandomSearch optimizeOnCV(List<Fold> folds) {
+    public RandomSearch optimizeOnCV(List<Split> folds) {
         this.folds = folds;
         return this;
     }

@@ -28,7 +28,7 @@ public class CVTest {
         double[][] X = { { 1, 2 }, { 3, 4 }, { 5, 6 }, { 7, 8 }, { 9, 10 } };
         double[] y = { 1, 2, 3, 4, 5 };
         double testRatio = 0.1;
-        Fold split = CV.split(Datasets.of(X, y), testRatio);
+        Split split = CV.split(Datasets.of(X, y), testRatio);
 
         assertEquals(X.length, split.getTest().length() + split.getTrain().length());
 
@@ -43,8 +43,8 @@ public class CVTest {
         double testRatio = 0.1;
 
         long seed = 1;
-        Fold split1 = CV.shuffleSplit(Datasets.of(X, y), testRatio, seed);
-        Fold split2 = CV.shuffleSplit(Datasets.of(X, y), testRatio, seed);
+        Split split1 = CV.shuffleSplit(Datasets.of(X, y), testRatio, seed);
+        Split split2 = CV.shuffleSplit(Datasets.of(X, y), testRatio, seed);
 
         assertEquals(split1, split2);
     }
@@ -55,17 +55,17 @@ public class CVTest {
         double[] y = { 1, 2, 3, 4, 5 };
 
         int k = 2;
-        List<Fold> folds = CV.kfold(Datasets.of(X, y), k);
+        List<Split> folds = CV.kfold(Datasets.of(X, y), k);
 
         double[][] fold1X = { X[0], X[1] };
         double[] fold1Y = { y[0], y[1] };
         double[][] fold2X = { X[2], X[3], X[4] };
         double[] fold2Y = { y[2], y[3], y[4] };
 
-        Fold fold0 = new Fold(Datasets.of(fold2X, fold2Y), Datasets.of(fold1X, fold1Y));
+        Split fold0 = new Split(Datasets.of(fold2X, fold2Y), Datasets.of(fold1X, fold1Y));
         assertEquals(fold0, folds.get(0));
 
-        Fold fold1 = new Fold(Datasets.of(fold1X, fold1Y), Datasets.of(fold2X, fold2Y));
+        Split fold1 = new Split(Datasets.of(fold1X, fold1Y), Datasets.of(fold2X, fold2Y));
         assertEquals(fold1, folds.get(1));
     }
 
@@ -75,14 +75,14 @@ public class CVTest {
         double[] y = { 1, 2, 3, 4, 5, 6, 7 };
 
         int k = 3;
-        List<Fold> folds = CV.kfold(Datasets.of(X, y), k);
+        List<Split> folds = CV.kfold(Datasets.of(X, y), k);
 
         double[][] trainX1 = { X[2], X[3], X[4], X[5], X[6] };
         double[] trainY1 = { y[2], y[3], y[4], y[5], y[6] };
         double[][] testX1 = { X[0], X[1] };
         double[] testY1 = { y[0], y[1] };
 
-        Fold fold1 = new Fold(Datasets.of(trainX1, trainY1), Datasets.of(testX1, testY1));
+        Split fold1 = new Split(Datasets.of(trainX1, trainY1), Datasets.of(testX1, testY1));
         assertEquals(fold1, folds.get(0));
 
         double[][] trainX2 = { X[0], X[1], X[4], X[5], X[6] };
@@ -90,7 +90,7 @@ public class CVTest {
         double[][] testX2 = { X[2], X[3] };
         double[] testY2 = { y[2], y[3] };
 
-        Fold fold2 = new Fold(Datasets.of(trainX2, trainY2), Datasets.of(testX2, testY2));
+        Split fold2 = new Split(Datasets.of(trainX2, trainY2), Datasets.of(testX2, testY2));
         assertEquals(fold2, folds.get(1));
 
         double[][] trainX3 = { X[0], X[1], X[2], X[3] };
@@ -98,7 +98,7 @@ public class CVTest {
         double[][] testX3 = { X[4], X[5], X[6] };
         double[] testY3 = { y[4], y[5], y[6] };
 
-        Fold fold3 = new Fold(Datasets.of(trainX3, trainY3), Datasets.of(testX3, testY3));
+        Split fold3 = new Split(Datasets.of(trainX3, trainY3), Datasets.of(testX3, testY3));
         assertEquals(fold3, folds.get(2));
     }
 

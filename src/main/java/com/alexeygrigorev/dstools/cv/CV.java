@@ -12,27 +12,27 @@ import com.alexeygrigorev.dstools.data.Dataset;
 
 public class CV {
 
-    public static Fold shuffleSplit(Dataset dataset, double testRatio) {
+    public static Split shuffleSplit(Dataset dataset, double testRatio) {
         return trainTestSplit(dataset, testRatio, true, System.currentTimeMillis());
     }
 
-    public static Fold shuffleSplit(Dataset dataset, double testRatio, long seed) {
+    public static Split shuffleSplit(Dataset dataset, double testRatio, long seed) {
         return trainTestSplit(dataset, testRatio, true, seed);
     }
 
-    public static Fold split(Dataset dataset, double testRatio) {
+    public static Split split(Dataset dataset, double testRatio) {
         return trainTestSplit(dataset, testRatio, false, 0);
     }
 
-    public static List<Fold> kfold(Dataset dataset, int k) {
+    public static List<Split> kfold(Dataset dataset, int k) {
         return kfold(dataset, k, false, 0);
     }
 
-    public static List<Fold> shuffledKfold(Dataset dataset, int k, long seed) {
+    public static List<Split> shuffledKfold(Dataset dataset, int k, long seed) {
         return kfold(dataset, k, true, seed);
     }
 
-    public static Fold trainTestSplit(Dataset dataset, double testRatio, boolean shuffle, long seed) {
+    public static Split trainTestSplit(Dataset dataset, double testRatio, boolean shuffle, long seed) {
         Validate.isTrue(testRatio > 0.0 && testRatio < 1.0, "testRatio must be in (0, 1) interval");
 
         int[] indexes = IntStream.range(0, dataset.length()).toArray();
@@ -45,21 +45,21 @@ public class CV {
         int[] trainIndex = Arrays.copyOfRange(indexes, 0, trainSize);
         int[] testIndex = Arrays.copyOfRange(indexes, trainSize, indexes.length);
 
-        return Fold.fromIndexes(dataset, trainIndex, testIndex);
+        return Split.fromIndexes(dataset, trainIndex, testIndex);
     }
 
-    public static List<Fold> repeatedShuffledSplit(Dataset dataset, int k, double testRatio, long seed) {
-        List<Fold> result = new ArrayList<>(k);
+    public static List<Split> repeatedShuffledSplit(Dataset dataset, int k, double testRatio, long seed) {
+        List<Split> result = new ArrayList<>(k);
 
         for (int i = 0; i < k; i++) {
-            Fold fold = shuffleSplit(dataset, testRatio, seed + i);
+            Split fold = shuffleSplit(dataset, testRatio, seed + i);
             result.add(fold);
         }
 
         return result;
     }
 
-    public static List<Fold> kfold(Dataset dataset, int k, boolean shuffle, long seed) {
+    public static List<Split> kfold(Dataset dataset, int k, boolean shuffle, long seed) {
         int length = dataset.length();
         Validate.isTrue(k < length);
 
@@ -69,12 +69,12 @@ public class CV {
         }
 
         int[][] folds = prepareFolds(indexes, k);
-        List<Fold> result = new ArrayList<>();
+        List<Split> result = new ArrayList<>();
 
         for (int i = 0; i < k; i++) {
             int[] testIdx = folds[i];
             int[] trainIdx = combineTrainFolds(folds, indexes.length, i);
-            result.add(Fold.fromIndexes(dataset, trainIdx, testIdx));
+            result.add(Split.fromIndexes(dataset, trainIdx, testIdx));
         }
 
         return result;
@@ -113,7 +113,6 @@ public class CV {
     }
 
     /**
-     * 
      * Shuffles an array of indexes
      * 
      * Implementation taken from

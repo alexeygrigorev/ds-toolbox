@@ -3,7 +3,7 @@ package com.alexeygrigorev.dstools.data;
 import java.util.List;
 
 import com.alexeygrigorev.dstools.cv.CV;
-import com.alexeygrigorev.dstools.cv.Fold;
+import com.alexeygrigorev.dstools.cv.Split;
 
 public interface Dataset {
 
@@ -15,11 +15,11 @@ public interface Dataset {
         return getX().length;
     }
 
-    default List<Fold> kfold(int k) {
+    default List<Split> kfold(int k) {
         return CV.kfold(this, k);
     }
 
-    default Fold trainTestSplit(double testRatio) {
+    default Split trainTestSplit(double testRatio) {
         return CV.split(this, testRatio);
     }
 }
