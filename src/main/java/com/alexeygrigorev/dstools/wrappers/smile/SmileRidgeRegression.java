@@ -1,4 +1,4 @@
-package com.alexeygrigorev.dstools.smile;
+package com.alexeygrigorev.dstools.wrappers.smile;
 
 import java.util.Map;
 import java.util.stream.IntStream;
@@ -6,13 +6,14 @@ import java.util.stream.IntStream;
 import org.apache.commons.lang3.Validate;
 
 import com.alexeygrigorev.dstools.data.Dataset;
-import com.alexeygrigorev.dstools.regression.RegressionModel;
+import com.alexeygrigorev.dstools.models.RegressionModel;
+import com.alexeygrigorev.dstools.opt.ParametrizedModel;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 
 import smile.regression.RidgeRegression;
 
-public class SmileRidgeRegression implements RegressionModel {
+public class SmileRidgeRegression implements ParametrizedModel, RegressionModel {
 
     public static final String LAMBDA = "lambda";
 

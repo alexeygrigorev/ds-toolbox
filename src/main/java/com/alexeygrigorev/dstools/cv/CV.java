@@ -4,13 +4,33 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+import java.util.function.Function;
 import java.util.stream.IntStream;
 
 import org.apache.commons.lang3.Validate;
+import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 
 import com.alexeygrigorev.dstools.data.Dataset;
+import com.alexeygrigorev.dstools.metrics.Metric;
+import com.alexeygrigorev.dstools.models.Model;
 
 public class CV {
+
+    public static DescriptiveStatistics crossValidate(List<Split> splits, Function<Dataset, Model> trainCallback,
+            Metric metric) {
+
+        double[] perf = splits.parallelStream().mapToDouble(fold -> {
+            Dataset foldTrain = fold.getTrain();
+            Dataset foldValidation = fold.getTest();
+            Model model = trainCallback.apply(foldTrain);
+
+            double[] predict = model.predict(foldValidation);
+            double[] actual = foldValidation.getY();
+            return metric.calculate(actual, predict);
+        }).toArray();
+
+        return new DescriptiveStatistics(perf);
+    }
 
     public static Split shuffleSplit(Dataset dataset, double testRatio) {
         return trainTestSplit(dataset, testRatio, true, System.currentTimeMillis());

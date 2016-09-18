@@ -56,6 +56,6 @@ public class Datasets {
     }
 
     public static boolean areEqual(Dataset ds1, Dataset ds2) {
-        return Arrays.equals(ds1.getX(), ds2.getX()) && Arrays.equals(ds1.getY(), ds2.getY());
+        return Arrays.deepEquals(ds1.getX(), ds2.getX()) && Arrays.equals(ds1.getY(), ds2.getY());
     }
 }

@@ -3,9 +3,9 @@ package com.alexeygrigorev.dstools.opt;
 import java.util.Arrays;
 
 import com.alexeygrigorev.dstools.data.Dataset;
-import com.alexeygrigorev.dstools.regression.RegressionModel;
+import com.alexeygrigorev.dstools.models.RegressionModel;
 
-class PredictSameRegression implements RegressionModel {
+class PredictSameRegression implements ParametrizedModel, RegressionModel {
     double hyperparam = 0;
 
     @Override

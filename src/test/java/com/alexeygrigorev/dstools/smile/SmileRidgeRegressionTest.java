@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
 import com.alexeygrigorev.dstools.data.Datasets;
+import com.alexeygrigorev.dstools.wrappers.smile.SmileRidgeRegression;
 
 public class SmileRidgeRegressionTest {
 

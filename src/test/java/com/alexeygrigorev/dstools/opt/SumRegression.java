@@ -5,9 +5,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.alexeygrigorev.dstools.data.Dataset;
-import com.alexeygrigorev.dstools.regression.RegressionModel;
+import com.alexeygrigorev.dstools.models.RegressionModel;
 
-class SumRegression implements RegressionModel {
+class SumRegression implements RegressionModel, ParametrizedModel {
     private final Map<String, Double> params = new HashMap<>();
 
     @Override

@@ -8,7 +8,6 @@ import com.alexeygrigorev.dstools.data.Dataset;
 import com.alexeygrigorev.dstools.data.Datasets;
 import com.alexeygrigorev.dstools.metrics.RegressionMetrics;
 import com.alexeygrigorev.dstools.opt.ParameterOptimizer.BestParams;
-import com.alexeygrigorev.dstools.regression.RegressionModel;
 
 public class RandomSearchTest {
 
@@ -17,7 +16,7 @@ public class RandomSearchTest {
         double[][] X = { { 0 }, { 0 }, { 0 }, { 0 }, { 0 }, { 0 }, { 0 }, { 0 }, { 0 } };
         double[] y = { 1, 2, 1, 1, 2, 1, 1, 2, 1 };
 
-        RegressionModel regression = new PredictSameRegression();
+        PredictSameRegression regression = new PredictSameRegression();
         Dataset data = Datasets.of(X, y);
 
         BestParams bestParams = RandomSearch.on(regression)
@@ -41,7 +40,7 @@ public class RandomSearchTest {
         double[][] X = { { 0 }, { 0 }, { 0 }, { 0 }, { 0 }, { 0 }, { 0 }, { 0 }, { 0 } };
         double[] y = { 1, 2, 1, 1, 2, 1, 1, 2, 1 };
 
-        RegressionModel regression = new PredictSameRegression();
+        PredictSameRegression regression = new PredictSameRegression();
         Dataset data = Datasets.of(X, y);
 
         BestParams bestParams = RandomSearch.on(regression)

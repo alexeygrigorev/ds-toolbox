@@ -14,10 +14,9 @@ import org.slf4j.LoggerFactory;
 
 import com.alexeygrigorev.dstools.cv.Split;
 import com.alexeygrigorev.dstools.metrics.Metric;
-import com.alexeygrigorev.dstools.models.Model;
+import com.alexeygrigorev.dstools.models.RegressionModel;
 import com.alexeygrigorev.dstools.opt.ParameterOptimizer.BestParams;
 import com.alexeygrigorev.dstools.opt.ParameterOptimizer.OptimizationCallback;
-import com.alexeygrigorev.dstools.regression.RegressionModel;
 
 public class RandomSearch {
     private static final Logger LOGGER = LoggerFactory.getLogger(RandomSearch.class);
@@ -30,13 +29,13 @@ public class RandomSearch {
 
     private Random random = new Random();
 
-    private Model model;
+    private ParametrizedModel model;
     private Metric metric;
     private List<Split> folds;
 
-    private OptimizationCallback<Model> callback;
+    private OptimizationCallback<ParametrizedModel> callback;
 
-    public static RandomSearch on(Model model) {
+    public static RandomSearch on(ParametrizedModel model) {
         RandomSearch randomSearch = new RandomSearch();
         return randomSearch.model(model);
     }
@@ -61,7 +60,7 @@ public class RandomSearch {
         return this;
     }
 
-    public RandomSearch model(Model model) {
+    public RandomSearch model(ParametrizedModel model) {
         this.model = model;
         return this;
     }
@@ -94,7 +93,7 @@ public class RandomSearch {
         }
     }
 
-    private OptimizationCallback<Model> regressionCallback() {
+    private OptimizationCallback<ParametrizedModel> regressionCallback() {
         return (m) -> {
             RegressionModel regression = (RegressionModel) m;
 
