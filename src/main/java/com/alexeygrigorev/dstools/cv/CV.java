@@ -16,8 +16,8 @@ import com.alexeygrigorev.dstools.models.Model;
 
 public class CV {
 
-    public static DescriptiveStatistics crossValidate(List<Split> splits, Function<Dataset, Model> trainCallback,
-            Metric metric) {
+    public static DescriptiveStatistics crossValidate(List<Split> splits, Metric metric,
+            Function<Dataset, Model> trainCallback) {
 
         double[] perf = splits.parallelStream().mapToDouble(fold -> {
             Dataset foldTrain = fold.getTrain();

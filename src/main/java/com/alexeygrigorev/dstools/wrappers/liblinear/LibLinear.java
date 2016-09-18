@@ -10,13 +10,66 @@ import de.bwaldvogel.liblinear.Feature;
 import de.bwaldvogel.liblinear.FeatureNode;
 import de.bwaldvogel.liblinear.Linear;
 import de.bwaldvogel.liblinear.Model;
+import de.bwaldvogel.liblinear.Parameter;
 import de.bwaldvogel.liblinear.Problem;
+import de.bwaldvogel.liblinear.SolverType;
 
 public class LibLinear {
+
+    private static final double EPS = 0.0001;
+
+    public static enum Penalty {
+        L1, L2;
+    }
+
+    public static enum Optimization {
+        PRIMAL, DUAL;
+    }
 
     public static void mute() {
         PrintStream devNull = new PrintStream(new NullOutputStream());
         Linear.setDebugOutput(devNull);
+    }
+
+    public static LibLinearBinaryClassificationWrapper logisticRegression(double C, Penalty penalty, Optimization opt) {
+        Parameter params;
+        if (penalty == Penalty.L1 && opt == Optimization.PRIMAL) {
+            params = new Parameter(SolverType.L1R_LR, C, EPS);
+        } else if (penalty == Penalty.L2 && opt == Optimization.PRIMAL) {
+            params = new Parameter(SolverType.L2R_LR, C, EPS);
+        } else if (penalty == Penalty.L2 && opt == Optimization.DUAL) {
+            params = new Parameter(SolverType.L2R_LR_DUAL, C, EPS);
+        } else {
+            throw new IllegalArgumentException("cannot find a solver for the provided combination");
+        }
+
+        return new LibLinearBinaryClassificationWrapper(params);
+    }
+
+    public static LibLinearBinaryClassificationWrapper linearSVC(double C, Penalty penalty, Optimization opt) {
+        Parameter params;
+        if (penalty == Penalty.L1 && opt == Optimization.PRIMAL) {
+            params = new Parameter(SolverType.L1R_L2LOSS_SVC, C, EPS);
+        } else if (penalty == Penalty.L2 && opt == Optimization.PRIMAL) {
+            params = new Parameter(SolverType.L2R_L2LOSS_SVC, C, EPS);
+        } else if (penalty == Penalty.L2 && opt == Optimization.DUAL) {
+            params = new Parameter(SolverType.L2R_L2LOSS_SVC_DUAL, C, EPS);
+        } else {
+            throw new IllegalArgumentException("cannot find a solver for the provided combination");
+        }
+
+        return new LibLinearBinaryClassificationWrapper(params);
+    }
+
+    public static LibLinearRegressionWrapper linearSVR(double C, Optimization opt) {
+        Parameter params = null;
+        if (opt == Optimization.PRIMAL) {
+            params = new Parameter(SolverType.L2R_L2LOSS_SVR, C, EPS);
+        } else if (opt == Optimization.DUAL) {
+            params = new Parameter(SolverType.L2R_L2LOSS_SVR_DUAL, C, EPS);
+        }
+
+        return new LibLinearRegressionWrapper(params);
     }
 
     public static Problem wrapDataset(Dataset dataset) {
