@@ -10,7 +10,9 @@ class PredictSameRegression implements ParametrizedModel, RegressionModel {
 
     @Override
     public <E> void setParam(String name, E value) {
-        hyperparam = (double) value;
+        if (value instanceof Double) {
+            hyperparam = (Double) value;
+        }
     }
 
     @Override
